@@ -1,0 +1,191 @@
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <style>
+        .sidebar-hidden {
+            transform: translateX(-100%);
+        }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans antialiased">
+    <div class="flex h-screen">
+        <!-- Sidebar -->
+        <div id="sidebar" class="bg-indigo-600 text-white w-64 flex flex-col transition-transform duration-300 lg:translate-x-0 lg:static absolute sidebar-hidden min-h-screen">
+            <div class="flex items-center justify-center h-20 border-b border-indigo-500 relative">
+                <span class="ml-2 mt-5 text-2xl font-bold">Pautang System</span>
+                  <button id="sidebarClose" class="text-gray-500 focus:outline-none lg:hidden absolute top-2 right-2">
+                        <i class="fas fa-bars text-white text-base m-2"></i>
+                </button>
+            </div>
+            <div class="relative p-4 lg:hidden">
+                <input class="bg-gray-100 rounded-full pl-10 pr-4 py-2 focus:outline-none w-full" placeholder="Search" type="text"/>
+            </div>
+            <nav class="flex-1 px-4 py-6">
+                <ul>
+                    <li class="mb-4">
+                        <a class="flex items-center text-indigo-200 hover:text-white font-bold" href="#">
+                            <i class="fas fa-tachometer-alt mr-3"></i>
+                            Dashboard
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a class="flex items-center text-gray-400 hover:text-white font-bold" href="#">
+                            <i class="fa fa-user mr-3"></i>
+                            Manage Clients
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a class="flex items-center text-gray-400 hover:text-white font-bold" href="#">
+                            <i class="fa fa-credit-card mr-3"></i>
+                            Manage Debts
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a class="flex items-center text-gray-400 hover:text-white font-bold" href="#">
+                            <i class="fas fa-cog mr-3"></i>
+                            Settings
+                        </a>
+                    </li>
+                    <li class="mb-4">
+                        <a class="flex items-center text-gray-400 hover:text-white font-bold" href="#">
+                            <i class="fa fa-user-circle mr-3"></i>
+                            Profile
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col">
+            <!-- Header -->
+            <header class="flex items-center justify-between bg-white p-4 border-b border-gray-200">
+                <div class="flex items-center">
+                    <button id="sidebarToggle" class="text-gray-500 focus:outline-none lg:hidden">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    
+                    <div class="relative ml-4 lg:ml-0 hidden lg:block">
+                        <input class="bg-gray-100 rounded-full pl-10 pr-4 py-2 focus:outline-none" placeholder="Search" type="text"/>
+                        <i class="fas fa-search absolute left-3 top-2 text-gray-400"></i>
+                    </div>
+                </div>
+            </header>
+            <!-- Dashboard Content -->
+            <div class="flex-1 p-4 sm:p-8">
+      <h1 class="text-3xl font-bold mb-6">Manage Debts</h1>
+
+      <!-- Add New Debt Button -->
+      <button class="bg-blue-600 text-white px-4 py-2 rounded mb-6" id="addDebtBtn">
+        Add New Debt
+      </button>
+
+      <!-- Debt Table -->
+      <div class="overflow-x-auto shadow-md border-b border-gray-200 mb-8">
+        <table class="min-w-full bg-white">
+          <thead class="bg-blue-600 text-white">
+            <tr>
+              <th class="px-4 py-2 text-left">#</th>
+              <th class="px-4 py-2 text-left">Client Name</th>
+              <th class="px-4 py-2 text-left">Debt Amount</th>
+              <th class="px-4 py-2 text-left">Due Date</th>
+              <th class="px-4 py-2 text-left">Payment Status</th>
+              <th class="px-4 py-2 text-center">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Example Debt Row -->
+            <tr>
+              <td class="px-4 py-2">1</td>
+              <td class="px-4 py-2">John Doe</td>
+              <td class="px-4 py-2">$500</td>
+              <td class="px-4 py-2">2024-12-01</td>
+              <td class="px-4 py-2">
+                <span class="bg-green-500 text-white px-2 py-1 rounded">Paid</span>
+              </td>
+              <td class="px-4 py-2 text-center">
+                <button class="bg-yellow-500 text-white px-2 py-1 rounded">Edit</button>
+                <button class="bg-red-500 text-white px-2 py-1 rounded ml-2">Delete</button>
+              </td>
+            </tr>
+            <!-- More debt rows can go here -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Modal for Adding/Editing Debt -->
+      <div id="debtModal" class="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center hidden">
+        <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg">
+          <h2 class="text-2xl font-bold mb-4" id="modalTitle">Add New Debt</h2>
+          <form id="debtForm">
+            <div class="mb-4">
+              <label for="client_name" class="block text-sm font-semibold mb-2">Client Name</label>
+              <input type="text" id="client_name" name="client_name" class="w-full px-4 py-2 border border-gray-300 rounded" required>
+            </div>
+            <div class="mb-4">
+              <label for="debt_amount" class="block text-sm font-semibold mb-2">Debt Amount</label>
+              <input type="number" id="debt_amount" name="debt_amount" class="w-full px-4 py-2 border border-gray-300 rounded" required>
+            </div>
+            <div class="mb-4">
+              <label for="due_date" class="block text-sm font-semibold mb-2">Due Date</label>
+              <input type="date" id="due_date" name="due_date" class="w-full px-4 py-2 border border-gray-300 rounded" required>
+            </div>
+            <div class="mb-4">
+              <label for="payment_status" class="block text-sm font-semibold mb-2">Payment Status</label>
+              <select id="payment_status" name="payment_status" class="w-full px-4 py-2 border border-gray-300 rounded">
+                <option value="unpaid">Unpaid</option>
+                <option value="paid">Paid</option>
+              </select>
+            </div>
+            <div class="flex justify-end">
+              <button type="button" class="bg-gray-500 text-white px-4 py-2 rounded mr-2" id="closeDebtModalBtn">Cancel</button>
+              <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">Save</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+           
+        </div>
+    </div>
+    <script>
+        // sidebar
+        document.getElementById('sidebarToggle').addEventListener('click', function () {
+            document.getElementById('sidebar').classList.toggle('sidebar-hidden');
+        });
+        document.getElementById('sidebarClose').addEventListener('click', function () {
+            document.getElementById('sidebar').classList.toggle('sidebar-hidden');
+        });
+        
+        
+        // Open the modal when the "Add New Debt" button is clicked
+    const addDebtBtn = document.getElementById('addDebtBtn');
+    const debtModal = document.getElementById('debtModal');
+    const closeDebtModalBtn = document.getElementById('closeDebtModalBtn');
+    
+    addDebtBtn.addEventListener('click', () => {
+      debtModal.classList.remove('hidden');
+      document.getElementById('modalTitle').textContent = 'Add New Debt';
+      document.getElementById('debtForm').reset();
+    });
+
+    // Close the modal when "Cancel" is clicked
+    closeDebtModalBtn.addEventListener('click', () => {
+      debtModal.classList.add('hidden');
+    });
+
+    // Handle form submission (this is just a placeholder for now)
+    const debtForm = document.getElementById('debtForm');
+    debtForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      // Handle the form data (e.g., send it to the server)
+      alert('Debt saved!');
+      debtModal.classList.add('hidden');
+    });
+
+    </script>
+</body>
+</html>
